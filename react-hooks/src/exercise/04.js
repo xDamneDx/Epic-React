@@ -34,11 +34,67 @@ function Board({onClick, squares}) {
   )
 }
 
-function Game() {
-  const [history, setHistory] = useLocalStorageState('tictactoe:history', Array(1).fill(Array(9).fill(null)))
-  const [step, setStep] = useLocalStorageState('tictactoe:step', 0)
+// function Game() {
+//   const [history, setHistory] = useLocalStorageState('tictactoe:history', Array(1).fill(Array(9).fill(null)))
+//   const [step, setStep] = useLocalStorageState('tictactoe:step', 0)
 
-  const currentSquares = history[step]
+//   const currentSquares = history[step]
+//   const nextValue = calculateNextValue(currentSquares)
+//   const winner = calculateWinner(currentSquares)
+//   const status = calculateStatus(winner, currentSquares, nextValue)
+
+//   function selectSquare(square) {
+//     if (winner || currentSquares[square]) {
+//       return
+//     }
+
+//     const squaresCopy = [...currentSquares]
+//     const historyCopy = [...history].splice(0, step+1)
+//     squaresCopy[square] = nextValue
+//     historyCopy.push(squaresCopy)
+//     setHistory(historyCopy)
+//     setStep((prevStep) => prevStep + 1)
+
+//   }
+
+//   function restart() {
+//     setHistory(Array(1).fill(Array(9).fill(null)))
+//     setStep(0)
+//   }
+
+//   function onHistoryHadler(index) {
+//     setStep(index)
+//   }
+
+//   return (
+//     <div className="game">
+//       <div className="game-board">
+//         <Board onClick={selectSquare} squares={currentSquares} />
+//         <button className="restart" onClick={restart}>
+//           restart
+//         </button>
+//       </div>
+//       <div className="game-info">
+//         <div>{status}</div>
+//         <ol>
+//           {history.map((historyStep, index) => (
+//             <li key={index}>
+//               <button onClick={() => onHistoryHadler(index)} disabled={index === step}>
+//                 {index === 0 ? `Go to game start` : `Go to move #${index}`} {index === step ? '(current)' : ''}
+//               </button>
+//             </li>
+//           ))}
+//         </ol>
+//       </div>
+//     </div>
+//   )
+// }
+
+function Game() {
+  const [currentStep, setCurrentStep] = useLocalStorageState('tictactoe:step', 0)
+  const [history, setHistory] = useLocalStorageState('tictactoe:history', [Array(9).fill(null)])
+
+  const currentSquares = history[currentStep]
   const nextValue = calculateNextValue(currentSquares)
   const winner = calculateWinner(currentSquares)
   const status = calculateStatus(winner, currentSquares, nextValue)
@@ -49,22 +105,29 @@ function Game() {
     }
 
     const squaresCopy = [...currentSquares]
-    const historyCopy = [...history].splice(0, step+1)
+    const newHistory = history.slice(0, currentStep + 1)
     squaresCopy[square] = nextValue
-    historyCopy.push(squaresCopy)
-    setHistory(historyCopy)
-    setStep((prevStep) => prevStep + 1)
+    setHistory([...newHistory, squaresCopy])
+    setCurrentStep(newHistory.length)
 
   }
 
   function restart() {
-    setHistory(Array(1).fill(Array(9).fill(null)))
-    setStep(0)
+    setHistory([Array(9).fill(null)])
+    setCurrentStep(0)
   }
 
-  function onHistoryHadler(index) {
-    setStep(index)
-  }
+  const moves = history.map((stepSquares, step) => {
+    const desc = step === 0 ? 'Go to game start' : `Go to move #${step}`
+    const isCurrentStep = step === currentStep
+    return (
+      <li key={step}>
+        <button onClick={() => setCurrentStep(step)} disabled={isCurrentStep}>
+          {desc} {isCurrentStep ? '(current)' : null}
+        </button>
+      </li>
+    )
+  })
 
   return (
     <div className="game">
@@ -76,15 +139,7 @@ function Game() {
       </div>
       <div className="game-info">
         <div>{status}</div>
-        <ol>
-          {history.map((historyStep, index) => (
-            <li key={index}>
-              <button onClick={() => onHistoryHadler(index)} disabled={index === step}>
-                {index === 0 ? `Go to game start` : `Go to move #${index}`} {index === step ? '(current)' : ''}
-              </button>
-            </li>
-          ))}
-        </ol>
+        <ol>{moves}</ol>
       </div>
     </div>
   )
