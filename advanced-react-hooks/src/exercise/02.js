@@ -39,14 +39,13 @@ const useSafeDispatch = (dispatch) => {
   }, [])
 
   return React.useCallback((...args) => {
-    if (mountedRef.curent) {
+    if (mountedRef.current) {
       dispatch(...args)
     }
   }, [dispatch])
 } 
 
 function useAsync(initialState) {
-
   const [state, unsafeDispatch] = React.useReducer(asyncReducer, {
     status: 'idle',
     data: null,
@@ -66,7 +65,6 @@ function useAsync(initialState) {
         dispatch({type: 'rejected', error})
       },
     )
-
   }, [dispatch])
 
   return {...state, run};
