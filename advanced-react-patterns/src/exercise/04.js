@@ -24,39 +24,8 @@ function useToggle() {
     }
   }
 
-  // return {on, togglerProps: {'aria-pressed': on, onClick: toggle}}
   return {on, getTogglerProps}
 }
-
-// function App() {
-//   const {on, togglerProps} = useToggle()
-//   return (
-//     <div>
-//       <Switch on={on} {...togglerProps} />
-//       <hr />
-//       <button aria-label="custom-button" {...togglerProps}>
-//         {on ? 'on' : 'off'}
-//       </button>
-//     </div>
-//   )
-// }
-
-// function App() {
-//   const {on, togglerProps} = useToggle()
-//   return (
-//     <div>
-//       <Switch on={on} {...togglerProps({on})} />
-//       <hr />
-//       <button
-//         aria-label="custom-button"
-//         {...togglerProps}
-//         onClick={() => console.info('onButtonClick')}
-//       >
-//         {on ? 'on' : 'off'}
-//       </button>
-//     </div>
-//   )
-// }
 
 function App() {
   const {on, getTogglerProps} = useToggle()
