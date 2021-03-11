@@ -54,7 +54,7 @@ function AppProvider({children}) {
       </AppDispatchContext.Provider>
     </AppStateContext.Provider>
   )
-}
+} 
 
 function DogProvider(props) {
   const [state, dispatch] = React.useReducer(dogReducer, {
