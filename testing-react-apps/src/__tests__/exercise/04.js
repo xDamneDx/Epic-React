@@ -4,6 +4,7 @@
 import * as React from 'react'
 import {render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import faker from 'faker'
 import Login from '../../components/login'
 
 test('submitting the form calls onSubmit with username and password', () => {
@@ -11,8 +12,12 @@ test('submitting the form calls onSubmit with username and password', () => {
 
   render(<Login onSubmit={handleSubmit} />)
 
-  const username = 'admin'
-  const password = '1234'
+  const buildLoginForm = () => ({
+    username: faker.internet.userName(),
+    password: faker.internet.password()
+  })
+
+  const { username, password } = buildLoginForm()
 
   userEvent.type(screen.getByLabelText(/username/i), username)
   userEvent.type(screen.getByLabelText(/password/i), password)
