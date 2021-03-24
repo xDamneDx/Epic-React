@@ -2,52 +2,23 @@
 // http://localhost:3000/counter-hook
 
 import * as React from 'react'
-import {render, screen} from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import {render, act} from '@testing-library/react'
 import useCounter from '../../components/use-counter'
 
-const Counter = ({initialCount, step}) => {
-  const {count, increment, decrement} = useCounter({initialCount, step})
-
-  return (
-    <div>
-      <div>Current count: {count}</div>
-      <button onClick={decrement}>Decrement</button>
-      <button onClick={increment}>Increment</button>
-    </div>
-  )
-}
-
 test('exposes the count and increment/decrement functions', () => {
-  render(<Counter />)
+  let result
 
-  const message = screen.getByText(/Current count/i)
-  const decrement = screen.getByRole('button', {name: /decrement/i})
-  const increment = screen.getByRole('button', {name: /increment/i})
+  function TestComponent() {
+    result = useCounter()
+    return null
+  }
 
-  expect(message).toHaveTextContent(/current count: 0/i)
-
-  userEvent.click(increment)
-  expect(message).toHaveTextContent(/current count: 1/i)
-
-  userEvent.click(decrement)
-  expect(message).toHaveTextContent(/current count: 0/i)
-})
-
-test('exposes the count and increment/decrement functions, with custom values', () => {
-  render(<Counter initialCount={2} step={3} />)
-
-  const message = screen.getByText(/Current count/i)
-  const decrement = screen.getByRole('button', {name: /decrement/i})
-  const increment = screen.getByRole('button', {name: /increment/i})
-
-  expect(message).toHaveTextContent(/current count: 2/i)
-
-  userEvent.click(increment)
-  expect(message).toHaveTextContent(/current count: 5/i)
-
-  userEvent.click(decrement)
-  expect(message).toHaveTextContent(/current count: 2/i)
+  render(<TestComponent />)
+  expect(result.count).toBe(0)
+  act(() => result.increment())
+  expect(result.count).toBe(1)
+  act(() => result.decrement())
+  expect(result.count).toBe(0)
 })
 
 /* eslint no-unused-vars:0 */
