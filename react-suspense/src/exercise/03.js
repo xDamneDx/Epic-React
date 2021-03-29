@@ -24,25 +24,12 @@ function PokemonInfo({pokemonResource}) {
 }
 
 const SUSPENSE_CONFIG = {
-  timoutMs: 4000,
-
+  timoutMs: 4000
 }
 
 function createPokemonResource(pokemonName) {
-  // 🦉 once you've finished the exercise, play around with the delay...
-  // the second parameter to fetchPokemon is a delay so you can play around
-  // with different timings
-  let delay = 1500
-  // try a few of these fetch times:
-  // shows busy indicator
-  // delay = 450
+  let delay = 200
 
-  // shows busy indicator, then suspense fallback
-  // delay = 5000
-
-  // shows busy indicator for a split second
-  // 💯 this is what the extra credit improves
-  // delay = 200
   return createResource(fetchPokemon(pokemonName, delay))
 }
 
@@ -73,7 +60,7 @@ function App() {
     <div className="pokemon-info-app">
       <PokemonForm pokemonName={pokemonName} onSubmit={handleSubmit} />
       <hr />
-      <div className="pokemon-info" style={{opacity: isPending ? 0.6 : 1}}>
+      <div className={`pokemon-info ${isPending ? 'pokemon-loading' : ''}`}>
         {pokemonResource ? (
           <PokemonErrorBoundary
             onReset={handleReset}
