@@ -24,7 +24,9 @@ function PokemonInfo({pokemonResource}) {
 }
 
 const SUSPENSE_CONFIG = {
-  timoutMs: 4000
+  timoutMs: 4000,
+  busyDelayMs: 300,
+  BusyMinDurationMs: 700
 }
 
 function createPokemonResource(pokemonName) {
