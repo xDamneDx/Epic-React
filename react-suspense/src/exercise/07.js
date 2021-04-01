@@ -8,6 +8,8 @@ import Spinner from '../suspense-list/spinner'
 import {createResource} from '../utils'
 import {fetchUser, PokemonForm, PokemonErrorBoundary} from '../pokemon'
 
+// 💰 this delay function just allows us to make a promise take longer to resolve
+// so we can easily play around with the loading time of our code.
 const delay = time => promiseResult =>
   new Promise(resolve => setTimeout(() => resolve(promiseResult), time))
 
